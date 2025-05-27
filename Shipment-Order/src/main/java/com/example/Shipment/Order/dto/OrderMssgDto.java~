@@ -1,0 +1,4 @@
+package com.example.Shipment.Order.dto;
+
+public class OrderMssgDto {
+}

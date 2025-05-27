@@ -1,0 +1,36 @@
+package com.example.User.Registration.controller;
+
+import com.example.User.Registration.dto.LoginDto;
+import com.example.User.Registration.dto.ResponseDto;
+import com.example.User.Registration.dto.UserDto;
+import com.example.User.Registration.entity.User;
+import com.example.User.Registration.service.UserService;
+import com.netflix.discovery.converters.Auto;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/register")
+public class RegistrationController {
+
+    @Autowired
+    private UserService userService;
+
+    @PostMapping("/user")
+    public ResponseEntity<UserDto> register(@RequestBody User newUser){
+
+        return new ResponseEntity<>(userService.createUser(newUser), HttpStatus.CREATED);
+
+    }
+
+    @PostMapping("/signin")
+    public ResponseEntity<ResponseDto> login(@RequestBody LoginDto loginDto){
+        ResponseDto response = userService.loginUser(loginDto);
+        if(response.getStatus() == "true")
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseDto("failed", response.getMessage()), HttpStatus.NOT_FOUND);
+    }
+
+}
